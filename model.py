@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-import gdown
 import torch
 import pinecone
 from sentence_transformers import SentenceTransformer, util
