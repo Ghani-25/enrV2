@@ -1,7 +1,5 @@
 import numpy as np
 from flask import Flask, request, jsonify, render_template
-import pickle
-import gdown
 import pandas as pd
 from model import enrichir
 
