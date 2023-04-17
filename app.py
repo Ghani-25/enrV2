@@ -17,7 +17,7 @@ def predict():
     text = request.form.get("occupations")
     occupation = text.split(',')
     print(occupation)
-    output = enrichir(occupation, 20)
+    output = enrichir(occupation)
 
     return render_template('index.html', prediction_text='Enriched prospects $ {}'.format(output))
 
