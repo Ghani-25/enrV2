@@ -2,6 +2,7 @@ numpy
 sentence-transformers
 torch
 gdown
+pinecone
 scikit-learn
 torchvision
 requests
