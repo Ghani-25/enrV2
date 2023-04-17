@@ -8,10 +8,10 @@ from sentence_transformers import SentenceTransformer, util
 model = SentenceTransformer("Ghani-25/LF_enrich_sim", device='cpu')
 pinecone.init(api_key='16146b33-2d76-4f3a-b03b-92fb81d42a42', environment='us-east4-gcp')
 index = pinecone.Index('aiprospects')
-url = "https://drive.google.com/uc?export=download&id=1rQc3XpyzW3a2l1m6ewqq_iBvot2sS4aY"
-OccClean = "occupationClean5m.csv"
-gdown.download(url, OccClean, quiet=False)
-occPd = pd.read_csv('./occupationClean5m.csv', sep=',', lineterminator='\n', on_bad_lines='skip', header=0, encoding='UTF-8')
+#url = "https://drive.google.com/uc?export=download&id=1rQc3XpyzW3a2l1m6ewqq_iBvot2sS4aY"
+#OccClean = "occupationClean5m.csv"
+#gdown.download(url, OccClean, quiet=False)
+#occupation = pd.read_csv('./occupationClean5m.csv', sep=',', lineterminator='\n', on_bad_lines='skip', header=0, encoding='UTF-8')
 def enrichir(query):
     xq = modell.encode([query]).tolist()
     result = index.query(xq, top_k=30, includeMetadata=False)
