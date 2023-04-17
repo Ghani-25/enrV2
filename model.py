@@ -1,30 +1,25 @@
 import numpy as np
 import pandas as pd
-import pickle
 import gdown
 import torch
+import pinecone
 from sentence_transformers import SentenceTransformer, util
 
 model = SentenceTransformer("Ghani-25/LF_enrich_sim", device='cpu')
-url = "https://huggingface.co/datasets/Ghani-25/Embeddings_full_Enrichments/resolve/main/Embeddings_full"
-output = "Embeddings_full"
-gdown.download(url, output, quiet=False)
-with open("./Embeddings_full", "rb") as fp:
-  Embeddings = pickle.load(fp)
-url = "https://drive.google.com/uc?export=download&id=1TyATJx0l5J3eVQ7PXx9zsZop4x1M1Ux6"
-OccClean = "occupationClean.csv"
+pinecone.init(api_key='16146b33-2d76-4f3a-b03b-92fb81d42a42', environment='us-east4-gcp')
+index = pinecone.Index('aiprospects')
+url = "https://drive.google.com/uc?export=download&id=1rQc3XpyzW3a2l1m6ewqq_iBvot2sS4aY"
+OccClean = "occupationClean5m.csv"
 gdown.download(url, OccClean, quiet=False)
-occPd = pd.read_csv('./occupationClean.csv', lineterminator='\n', on_bad_lines='skip', header=0, encoding='UTF-8')
-def enrichir(tab, count):
-    #Compute cosine-similarities with all embeddings
-    query = '. '.join(tab)
-    query_embedd = model.encode(query)
-    cosine_scores = util.pytorch_cos_sim(query_embedd, Embeddings)
-    Similarities = torch.sort(cosine_scores,descending=True)
-    print('Les taux de similarités sont :', Similarities)
-    top_matches = torch.argsort(cosine_scores, dim=-1, descending=True).tolist()[0][0:count]
-    print(top_matches)
-    results=[]
-    for index in top_matches:
-      results.append(occPd.iloc[index,1])
-    return results
+occPd = pd.read_csv('./occupationClean5m.csv', sep=',', lineterminator='\n', on_bad_lines='skip', header=0, encoding='UTF-8')
+def enrichir(query):
+    xq = modell.encode([query]).tolist()
+    result = index.query(xq, top_k=30, includeMetadata=False)
+    res = result.to_dict() #conversion to dict
+    lis = list(res.values())[0]
+    #Liste_enrichie = pd.DataFrame(lis)
+    #Liste_enrichie = Liste_enrichie.rename(columns={"id": "linkedinId"})
+    #Liste_enrichie['linkedinId'] = Liste_enrichie['linkedinId'].astype(float)
+    #merged_df = pd.merge(Liste_enrichie, occupation, on='linkedinId', how='inner')
+    #merged_df.drop_duplicates(subset='linkedinId', keep='first', inplace=True)
+    return lis
