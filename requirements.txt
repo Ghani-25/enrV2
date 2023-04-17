@@ -1,7 +1,6 @@
 numpy
 sentence-transformers
 torch
-gdown
 pinecone
 scikit-learn
 torchvision
@@ -11,4 +10,3 @@ Flask_Cors
 Flask_RESTful
 pandas
 gevent
-
