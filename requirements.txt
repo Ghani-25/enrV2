@@ -1,0 +1,13 @@
+numpy
+sentence-transformers
+torch
+gdown
+scikit-learn
+torchvision
+requests
+Flask
+Flask_Cors
+Flask_RESTful
+pandas
+gevent
+
