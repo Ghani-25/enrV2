@@ -1,7 +1,7 @@
 numpy
 sentence-transformers
 torch
-pinecone
+pinecone-client -q
 scikit-learn
 torchvision
 requests
