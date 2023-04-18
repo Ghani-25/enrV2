@@ -1,12 +1,9 @@
-numpy
 sentence-transformers
 torch
 pinecone-client 
-scikit-learn
 torchvision
 requests
 Flask
 Flask_Cors
 Flask_RESTful
 pandas
-gevent
