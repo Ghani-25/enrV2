@@ -26,7 +26,7 @@ def results():
     occupation = data.get("occupations")
     count = data.get("count")
     print(occupation)
-    output = enrichir(occupation, count)
+    output = enrichir(occupation)
 
     return jsonify(output)
 
