@@ -12,7 +12,7 @@ def home():
 def predict():
 
     text = request.form.get("occupations")
-    occupation = text.split(',')
+    occupation = text.split('.')
     print(occupation)
     output = enrichir(occupation)
 
