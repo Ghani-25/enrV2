@@ -1,9 +1,6 @@
 sentence-transformers
-torch
 pinecone-client 
-torchvision
 requests
 Flask
 Flask_Cors
 Flask_RESTful
-pandas
