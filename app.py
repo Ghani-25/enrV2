@@ -23,7 +23,6 @@ def results():
 
     data = request.get_json(force=True)
     occupation = data.get("occupations")
-    count = data.get("count")
     print(occupation)
     output = enrichir(occupation)
 
