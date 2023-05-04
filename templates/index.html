@@ -1,35 +1,133 @@
 <!DOCTYPE html>
-<html >
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Deployment Tutorial 1</title>
-    <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-
-</head>
-
-<body style="background: #000;">
-<div class="login">
-    <h1>Prospect enrichment</h1>
-
-    <!-- Main Input For Receiving Query to our ML -->
-    <form action="{{ url_for('predict')}}"method="post">
-        <input type="text" name="occupations" placeholder='["Data analyst", "Data expert", ...]' required="required" />
-        <button type="submit" class="btn btn-primary btn-block btn-large">Get enriched prospects</button>
-    </form>
-
-    <br>
-    <br>
+    <script>
+        function submitRetrieveIdsForm() {
+            const ids = Array.from(document.querySelectorAll('tbody tr')).map(row => row.firstElementChild.textContent);
+            const data = { ids: JSON.stringify(ids) };
+            const form = document.createElement('form');
+            form.style.display = 'none';
+            form.method = 'POST';
+            form.action = '/retrieve_ids';
+            for (const key in data) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = data[key];
+                form.appendChild(input);
+            }
+            document.body.appendChild(form);
+            form.submit();
+            return false;
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const retrieveIdsButton = document.getElementById('retrieveIdsButton');
+            if (retrieveIdsButton) {
+                if (document.querySelector('tbody tr')) {
+                    retrieveIdsButton.style.display = 'block';
+                } else {
+                    retrieveIdsButton.style.display = 'none';
+                }
+            }
+        });
+    </script>
     
-     {{ prediction_text }} 
-    <!--{% for table in tables %}
-            {{titles[loop.index]}}
-            {{ table|safe }}
-    {% endfor %}-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Occupation Enrichment</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
 
-</div>
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+        }
+
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI-Prospect-Finder</h1>
+        <form action="/predict" method="post">
+            <input type="text" name="occupations" placeholder="Enter occupations separated by ','" required>
+            <input type="submit" value="Enhance">
+        </form>
+
+        <!-- Ajouter le formulaire pour récupérer les ID -->
+        <form id="retrieveIdsForm" onsubmit="return submitRetrieveIdsForm()">
+            <input type="submit" id="retrieveIdsButton" value="Retrieve Selected IDs">
+        </form>
+        <!-- Fin du formulaire pour récupérer les ID -->
+
+
+        {% if prediction_text %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Score de similarité</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in prediction_text %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ (item.score * 100)|round(2) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
 </body>
 </html>
+
