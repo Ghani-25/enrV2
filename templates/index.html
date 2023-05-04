@@ -114,14 +114,12 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Score de similarité</th>
                 </tr>
             </thead>
             <tbody>
                 {% for item in prediction_text %}
                 <tr>
                     <td>{{ item.id }}</td>
-                    <td>{{ (item.score * 100)|round(2) }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
