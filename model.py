@@ -8,9 +8,6 @@ index = pinecone.Index('ai-find')
 def enrichir(query, count):
     xq = model.encode(query).tolist()
     result = index.query(xq, top_k=count, includeMetadata=False)
-    res = result.to_dict()  # conversion to dict
-    ids = list(res.values())[0]
-    scores = list(res.keys())[0]
-
-    return ids, scores
-
+    res = result.to_dict() #conversion to dict
+    lis = list(res.values())[0]
+    return lis
