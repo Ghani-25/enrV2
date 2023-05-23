@@ -1,39 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script>
-        function submitRetrieveIdsForm() {
-            const ids = Array.from(document.querySelectorAll('tbody tr')).map(row => row.firstElementChild.textContent);
-            const data = { ids: JSON.stringify(ids) };
-            const form = document.createElement('form');
-            form.style.display = 'none';
-            form.method = 'POST';
-            form.action = '/retrieve_ids';
-            for (const key in data) {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = key;
-                input.value = data[key];
-                form.appendChild(input);
-            }
-            document.body.appendChild(form);
-            form.submit();
-            return false;
-        }
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const retrieveIdsButton = document.getElementById('retrieveIdsButton');
-            if (retrieveIdsButton) {
-                if (document.querySelector('tbody tr')) {
-                    retrieveIdsButton.style.display = 'block';
-                } else {
-                    retrieveIdsButton.style.display = 'none';
-                }
-            }
-        });
-    </script>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Occupation Enrichment</title>
@@ -92,6 +59,7 @@
         th {
             background-color: #f2f2f2;
         }
+
     </style>
 </head>
 <body>
@@ -101,25 +69,21 @@
             <input type="text" name="occupations" placeholder="Enter occupations separated by ','" required>
             <input type="submit" value="Enhance">
         </form>
-
-        <!-- Ajouter le formulaire pour récupérer les ID -->
-        <form id="retrieveIdsForm" onsubmit="return submitRetrieveIdsForm()">
-            <input type="submit" id="retrieveIdsButton" value="Retrieve Selected IDs">
-        </form>
-        <!-- Fin du formulaire pour récupérer les ID -->
-
-
         {% if prediction_text %}
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Score de similarité</th>
+                    <th>Metadata</th>
                 </tr>
             </thead>
             <tbody>
                 {% for item in prediction_text %}
                 <tr>
                     <td>{{ item.id }}</td>
+                    <td>{{ item.score }}</td>
+                    <td>{{ item.metaData }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -128,4 +92,3 @@
     </div>
 </body>
 </html>
-
